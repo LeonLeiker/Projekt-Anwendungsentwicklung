@@ -1,18 +1,27 @@
-name: Docker Image CI
+name:  Build Docker Image and push to GHCR
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
-  build:
-
+  deploy:
+    name: Build Docker Image and push to GHCR
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout the Files
+      uses: actions/checkout@v4
+      - name: Log in to the Container registry
+      with:
+        registry: https://ghcr.io
+        username: 
+        password:
+      - name: Build Docker image and push
+      id: docker_build
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: ghrc.io/leonleiker/projekt-anwendungsentwicklung:latest
